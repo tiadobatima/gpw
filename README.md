@@ -16,10 +16,10 @@ Here we honor his courage and sacrifice by aptly naming an
 
 #### The great GPW Meredith
 
-![The great GPW Meredith](docs/gpw.jpg "The great GPW Meredith" =255x363)
+![The great GPW Meredith](docs/gpw.jpg "The great GPW Meredith")
 
 #### Evil Emu
-![Evil Emu](docs/emu.png "Evil Emu" =255x363))
+![Evil Emu](docs/emu.png "Evil Emu")
 
 
 ## Infrastructure as Code
