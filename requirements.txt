@@ -1,0 +1,11 @@
+awscli
+boto3
+google-api-python-client
+google-cloud
+jinja2
+jmespath
+Mako==1.0.4
+MarkupSafe==0.23
+PyYAML==3.11
+requests==2.13.0
+six==1.10.0
