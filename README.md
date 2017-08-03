@@ -14,11 +14,12 @@ of 1932. A veteran and true hero.
 Here we honor his courage and sacrifice by aptly naming an 
 *infrastructure-as-code* tool after him.
 
-The great GPW Meredith
-![The great GPW Meredith](docs/gpw.jpg)("The great GPW Meredith")
+#### The great GPW Meredith
 
-Evil Emu
-![Evil Emu](docs/emu.png)("Evil Emu")
+![The great GPW Meredith](docs/gpw.jpg "The great GPW Meredith")
+
+#### Evil Emu
+![Evil Emu](docs/emu.png "Evil Emu")
 
 
 ## Infrastructure as Code
