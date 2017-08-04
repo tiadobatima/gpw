@@ -51,7 +51,7 @@ export AWS_DEFAULT_PROFILE=some-profile
 export AWS_DEFAULT_REGION=us-west-2
 
 # getting help
-python3 ci/cf-wrapper --help
+python3 gpw.py --help
 
 # render: only print stack on screen
 python3 gpw.py render aws/stacks/vpc-training-dev.mako
