@@ -7,12 +7,13 @@ GPW are the initials of *Gwynedd Purves Wynn-Aubrey Meredith's* given
 names.
 
 For the few who don't yet know, Major GPW Meredith, of the Seventh Heavy
-Battery of the Royal Australian Artillery was the commander of the Australians
-against the Emus in the bloody [Emu War](https://en.wikipedia.org/wiki/Emu_War)
-of 1932. A veteran and true hero.
+Battery of the Royal Australian Artillery was the veteran commander of the 
+Australians against the Emus in the bloody [Emu War](https://en.wikipedia.org/wiki/Emu_War)
+of 1932. A patriot and true hero.
 
 Here we honor his courage and sacrifice by aptly naming an 
-*infrastructure-as-code* tool after him.
+*infrastructure-as-code* tool after his legacy.
+
 
 #### The great GPW Meredith
 
