@@ -15,15 +15,15 @@ Here we honor his courage, sacrifice, and life-story by aptly naming an
 *infrastructure-as-code* tool after his legacy.
 
 
-#### The great GPW Meredith - Australian Hero
+##### The great GPW Meredith - Australian Hero
 
 ![The great GPW Meredith, Australian Hero](docs/gpw.jpg "The great GPW Meredith")
 
-#### Evil Emu - Enemy Of The State
+##### Evil Emu - Enemy Of The State
 ![Evil Emu - Enemy Of The State](docs/emu.png "Evil Emu")
 
 
-**Major GPW Meredith... Father, patriot and true hero. Lest we forget!**
+### Major GPW Meredith... Father, patriot and true hero. Lest we forget!
 
 ## Infrastructure as Code
 
