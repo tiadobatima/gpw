@@ -9,19 +9,21 @@ names.
 For the few who don't yet know, Major GPW Meredith, of the Seventh Heavy
 Battery of the Royal Australian Artillery was the veteran commander of the 
 Australians against the Emus in the bloody [Emu War](https://en.wikipedia.org/wiki/Emu_War)
-of 1932. A patriot and true hero.
+of 1932.
 
-Here we honor his courage and sacrifice by aptly naming an 
+Here we honor his courage, sacrifice, and life-story by aptly naming an 
 *infrastructure-as-code* tool after his legacy.
 
 
-#### The great GPW Meredith
+#### The great GPW Meredith - Australian Hero
 
-![The great GPW Meredith](docs/gpw.jpg "The great GPW Meredith")
+![The great GPW Meredith, Australian Hero](docs/gpw.jpg "The great GPW Meredith")
 
-#### Evil Emu
-![Evil Emu](docs/emu.png "Evil Emu")
+#### Evil Emu - Enemy Of The State
+![Evil Emu - Enemy Of The State](docs/emu.png "Evil Emu")
 
+
+**Major GPW Meredith... Father, patriot and true hero. Lest we forget!**
 
 ## Infrastructure as Code
 
