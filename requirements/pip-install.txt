@@ -1,7 +1,10 @@
+#
+# gpip packages required when installing this tool (runtime requirements)
+#
 awscli
 boto3
 google-api-python-client
-google-cloud
+#google-cloud
 jinja2
 jmespath
 Mako==1.0.4
