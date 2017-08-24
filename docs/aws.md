@@ -9,6 +9,30 @@ Because these parameters can be lists or dictionaries, creating reusable
 master templates where we the number of resources aren't known in advance
 is quite simple (and also easy to read).
 
+## Pre-requisites
+
+The only pre-requisite is the python AWS SDK (Boto3) and jmespath.
+Both are automatically installed with the the tool.
+
+## Authentication
+
+Authentication against AWS is done by configuring Boto or the AWS CLI (which 
+uses Boto). The easiest way is to create a default CLI/boto profile with the 
+AWS CLI (which pretty much everyone already has installed):
+
+```
+$ aws configure
+AWS Access Key ID [None]: AKIAIOSFODNN7EXAMPLE
+AWS Secret Access Key [None]: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+Default region name [None]: us-west-2
+Default output format [None]: ENTER
+```
+
+If the AWS CLI isn't available, any of these options defined in the [Boto 
+configuration page](http://boto3.readthedocs.io/en/latest/guide/configuration.html)
+will work.
+
+
 ## Stacks
 
 Stacks represent a clouformation Stack, with input values, or *Parameters* that can be passed to a

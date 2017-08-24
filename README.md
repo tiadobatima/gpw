@@ -121,10 +121,10 @@ resource manager, only enhance it.
 Also, the stacks/input files for each cloud provider try to use the syntax and 
 constructs native to the provider, instead of, for example, trying to make GCP
 Deployment Manager configurations look similar to AWS Cloudformation stacks.
-To illustrate, in AWS, the variable and Sections used in a CFN stack are all 
-*CamelCase*, while GCP uses *Python-style* (lowercase with underscores) in its
-Deployment Manager configuration. This tool tries hard to keep that spirit, so
-not to throw off users already familiar with a particular cloud provider's DSL.
+To illustrate, in AWS, the variable and section names used in a CFN stack are
+ all *CamelCase*, while GCP uses *Python-style* (lowercase with underscores) in
+its Deployment Manager configuration. This tool tries hard to keep that spirit,
+so not to throw off users already familiar with a particular cloud provider's DSL.
 
 
 ### Why a higher level template engine? And why Mako as default?
@@ -139,6 +139,20 @@ Mako is the default because it's very easy to define simple blocks of python
 code inside the template, making it a very powerful tool. But to simplify the 
 lives of the folks familiar to Ansible, Saltstack, and others, Jinja is also
 supported, but be warned that it's just not as flexible as Mako.
+
+
+### Stack Types
+
+
+* [Cloudformation](docs/aws.md)
+* [GCP](docs/gcp.md)
+* [Shell](docs/shell.md)
+
+
+### Development
+
+Follow the guidelines in the [development page](docs/development.md)
+
 
 
 ## Contacts
