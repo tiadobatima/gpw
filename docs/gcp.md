@@ -3,21 +3,23 @@
 GCP stacks (or deployments configurations) look very similar to *gcloud's* 
 configurations for *Deployment Manager*.
 
-GCP APIs, SDKs, and command line tool (gcloud) are a bag of cats, but a lot of
-the design choices GCP made closely mirror the ones this tool made, but GCP 
-DM doesn't support one major piece of functionality: Cross stack/deployment
- references
+GCP's APIs, SDKs, and the command line tool (gcloud) are a very messy bag of
+cats, but a lot of the design choices GCP made closely mirror the ones this
+tool made for AWS, with the caviat that GCP DM doesn't support one major 
+piece of functionality: *Cross stack/deployment references*
 
 Because the parameter mapping for the GCP DM API look so different from
 *gcloud's*, the choice was made to follow *gcloud's* configuration, which at 
-least has a bit of documentation and examples avalailable, unlike the DM's API.
+least has a bit of documentation and examples avalailable, unlike DM's API.
 
-All keys for *gcloud's* DM configuration are supported, with the addition of:
-- name (supported by API, not gcloud)
-- description (supported by API, not gcloud)
-- labels (supported by API, not gcloud)
-- project (supported by APY, not gcloud)
-- stack_type (required by this tool)
+All parameters for *gcloud's* DM configuration are supported by this tool, with
+the addition of:
+
+* name (supported by API, not gcloud)
+* description (supported by API, not gcloud)
+* labels (supported by API, not gcloud)
+* project (supported by APY, not gcloud)
+* stack_type (required by this tool)
 
 
 ## Pre-requisites
@@ -138,4 +140,3 @@ The underlying function *get_stack_output()* can also be used for further proces
 %>
 my-team: ${team}
 ```
-
