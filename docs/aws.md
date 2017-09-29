@@ -305,7 +305,7 @@ S3Bucket: ${s3_bucket}
 
 ### !AWS
 It takes a dictionary with the keys "service", "action", "arguments", and
-"result_filter".
+"result_filter" as tag arguments.
 This tag makes a call to **ANY** AWS service with any argument wanted and
 filters the result with a *JMESPATH* query, if needed.
 This is very powerful because not every resource can be created with
@@ -340,12 +340,44 @@ for the !AWS tag can also be used:
 <%
     vpcs = call_aws(
         service="ec2",
-        action: "describe_vpcs",
-        arguments: {"Filters": [{"Name": "tag:sometag", "Values":
+        action="describe_vpcs",
+        arguments={"Filters": [{"Name": "tag:sometag", "Values":
 ["somevalue"]}]},
-        result_filter: "Vpcs[].VpcId"
+        result_filter="Vpcs[].VpcId"
     )
     for vpc in the vpcs:
         do_something_with_vpc()
+%>
+```
+
+### !SSM
+It takes a dictionary with the keys "Name" and "WithDecryption" as arguments, per
+[get_parameter()](http://boto3.readthedocs.io/en/latest/reference/services/ssm.html#SSM.Client.get_parameter)
+method of Boto's SSM client.
+This tag returns the value of a parameter from the AWS Simple System Manager
+(SSM) Parameter Store, and is specially useful to retrieve secrets
+(passwords/keys) from SSM's parameter store so they are not kept plaintext in
+git or any other SCM of choice.
+Naturally, plain text parameters can also be retrieved, thus the argument
+"WithDecryption" is optional, but must be specified when retrieving
+encrypted parameters.
+
+Examples:
+```
+Password: !SSM {Name: my-password, WithDecryption: true}
+
+PlainTextParam: !SSM {Name: /some/useful/param}
+```
+
+This tag uses *call_aws()* as underlying function, so if the parameter is
+needed inside a python block, something like this should be done:
+
+```
+<%
+    password = call_aws(
+        service="ssm",
+        action="get_parameter",
+        arguments={Name="my-password", WithDecryption: true}
+    )["Parameter"]["Value"]
 %>
 ```

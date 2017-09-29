@@ -156,4 +156,4 @@ Follow the guidelines in the [development page](docs/development.md)
 
 
 ## Contacts
-- Gustavo Baratto: gus.baratto AT sourcedgroup.com
+- Gustavo Baratto: gbaratto AT gmail

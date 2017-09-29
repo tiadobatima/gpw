@@ -45,6 +45,25 @@ def yaml_cloudformation_constructor(loader, node):
         raise SystemExit("Either 'output' or 'resource_id' must be provided")
 
 
+def yaml_ssm_constructor(loader, node):
+    """ Implements the yaml tag !SSM
+
+    The tag takes the same arguments as SSM's GetParameter call:
+    http://boto3.readthedocs.io/en/latest/reference/services/ssm.html#SSM.Client.get_parameter
+    http://docs.aws.amazon.com/systems-manager/latest/APIReference/API_GetParameter.html
+
+    Example:
+      SomeValue: !SSM {Name: /some/parameter/name}
+      SomePassword: !SSM {Name: /some/name, WithDecryption: true}
+    """
+    args = loader.construct_mapping(node)
+    return call_aws(
+      service="ssm",
+      action="get_parameter",
+      arguments=args
+    )["Parameter"]["Value"]
+
+
 def yaml_aws_constructor(loader, node):
     """ Implements the yaml tag !AWS
 
@@ -83,6 +102,7 @@ def yaml_gcp_dm_constructor(loader, node):
 
 yaml.add_constructor(u'!Cloudformation', yaml_cloudformation_constructor)
 yaml.add_constructor(u'!AWS', yaml_aws_constructor)
+yaml.add_constructor(u'!SSM', yaml_ssm_constructor)
 yaml.add_constructor(u'!GCPDM', yaml_gcp_dm_constructor)
 
 
