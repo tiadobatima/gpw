@@ -187,7 +187,6 @@ def get_template_body(url):
 
 
 def parse_mako(stack_name, template_body, parameters):
-
     """ Parses Mako templates
     """
     # The default for strict_undefined is False. Change to True to
@@ -219,6 +218,8 @@ def parse_mako(stack_name, template_body, parameters):
 
 
 def parse_jinja(stack_name, template_body, parameters):
+    """ Parses Jinja templates
+    """
     jinja_template = jinja2.Template(template_body)
     parameters["get_stack_output"] = get_stack_output
     parameters["get_stack_resource"] = get_stack_resource
@@ -238,8 +239,12 @@ def parse_jinja(stack_name, template_body, parameters):
 
 
 def parse_json(stack_name, template_body, parameters):
+    """ Parses Json templates
+    """
     raise SystemExit("json templates not yet supported")
 
 
 def parse_yaml(stack_name, template_body, parameters):
+    """ Parses YAML templates
+    """
     raise SystemExit("yaml templates not yet supported")

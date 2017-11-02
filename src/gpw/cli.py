@@ -4,6 +4,7 @@ from __future__ import print_function
 import argparse
 import logging
 import os
+import sys
 import yaml
 
 import jinja2
@@ -14,11 +15,12 @@ import gpw.utils
 import gpw.stacks
 
 
-def main():
-    """ entry point
+def parse_args(args):
+    """ parse CLI options
 
-    TODO (gus): replace "action" option with subparser
+    TODO (tiadobatima): replace "action" option with subparser
     """
+
     parser = argparse.ArgumentParser("Manage cloudformation stacks")
     parser.add_argument(
         "action",
@@ -37,7 +39,8 @@ def main():
     parser.add_argument(
         "stack",
         type=argparse.FileType("r"),
-        help=("The path to the stack file. Use - for stdin, in which case -t must be specified") # noqa
+        help=("The path to the stack file. "
+              "Use - for stdin, in which case -t must be specified")
     )
     parser.add_argument(
         "--templating-engine",
@@ -45,7 +48,8 @@ def main():
         type=str,
         choices=["mako", "jinja", "yaml"],
         default="mako",
-        help="The templating engine to render the stack. Only used when stack comes from stdin (-)" # noqa
+        help=("The templating engine to render the stack. "
+              "Only used when stack comes from stdin (-)")
     )
     parser.add_argument(
         "--wait",
@@ -84,7 +88,13 @@ def main():
         help="The log level for botocore"
     )
 
-    args = parser.parse_args()
+    return parser.parse_args()
+
+
+def main():
+    """ Entry point
+    """
+    args = parse_args(sys.argv[1:])
 
     if not args.build_id:
         raise SystemExit("The build ID is required. \
@@ -139,7 +149,7 @@ def main():
             )
         # mako wraps the exception where the real information is, so we unwrap
         # and display only the part that matters to the user
-        except:
+        except Exception as exc:
             raise SystemExit(mako.exceptions.text_error_template().render())
     elif templating_engine == "jinja":
         stack_template = jinja2.Template(stack_file)
