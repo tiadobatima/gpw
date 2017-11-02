@@ -25,6 +25,74 @@ If the system-wide python installation is used, ie *pyvenv* is not used:
 make develop
 ```
 
+## Directory Structure
+
+This project adopts the *src/package* directory structure explained
+[here](https://blog.ionelmc.ro/2014/05/25/python-packaging/#the-structure),
+and [here](https://docs.pytest.org/en/latest/goodpractices.html#tests-outside-application-code).
+
+```
+.
+├── docs
+│   ├── aws.md
+│   ├── development.md
+│   ├── emu.png
+│   ├── gcp.md
+│   ├── gpw.jpg
+│   └── shell.md
+├── env
+├── examples
+│   ├── consumables
+│   │   ├── account
+│   │   │   └── common.mako
+│   │   ├── application
+│   │   │   ├── autoscaling.mako
+│   │   │   └── rds.mako
+│   │   ├── network
+│   │   │   ├── securitygroup.mako
+│   │   │   ├── subnet.mako
+│   │   │   └── vpc.mako
+│   │   └── security
+│   │       └── accesspolicy.mako
+│   └── stacks
+│       ├── aws
+│       │   ├── account
+│       │   │   └── common.mako
+│       │   ├── network
+│       │   │   ├── citrix-demo-dev.mako
+│       │   │   ├── securitygroup-demo-dev.yaml
+│       │   │   ├── subnet-demo-dev.mako
+│       │   │   ├── vpc-demo-dev.mako
+│       │   │   └── vpc-demo-dev.yaml
+│       │   └── security
+│       │       └── accesspolicy-demo-dev-jira.yaml
+│       └── gcp
+│           ├── ox.txt
+│           ├── vm1.mako
+│           └── vm.yaml
+├── Makefile
+├── README.md
+├── requirements
+│   ├── deb-build.txt
+│   ├── deb-install.txt
+│   ├── pip-install.txt
+│   └── pip-test.txt
+├── setup.cfg
+├── setup.py
+├── src
+│   └── gpw
+│       ├── cli.py
+│       ├── __init__.py
+│       ├── stacks
+│       │   ├── aws.py
+│       │   ├── gcp.py
+│       │   ├── __init__.py
+│       │   └── shell.py
+│       └── utils.py
+└── tests
+    ├── conftest.py
+```
+
 ## Dependencies
 
 Python doesn't have a really good, unified way of resolving package

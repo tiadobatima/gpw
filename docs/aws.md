@@ -296,7 +296,7 @@ of using the !Cloudformation tag, we can just use the underlying functions
 source()* to get the output or the physical resource_id values:
 ```
 <%
-    # "my.subdomain.sourcedgroup.com" into "my-subdomain-sourcedgroup-com"
+    # "my.subdomain.company.com" into "my-subdomain-company-com"
     hostedzone = get_stack_output(common_stack, "Hostezone")
     s3_bucket = "-".join(hostedzone.split("."))
 %>
