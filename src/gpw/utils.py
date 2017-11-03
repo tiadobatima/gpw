@@ -1,4 +1,6 @@
-#!/usr/bin/env python
+""" Utilities and helper functions
+"""
+
 
 from __future__ import print_function
 import requests
@@ -58,9 +60,9 @@ def yaml_ssm_constructor(loader, node):
     """
     args = loader.construct_mapping(node)
     return call_aws(
-      service="ssm",
-      action="get_parameter",
-      arguments=args
+        service="ssm",
+        action="get_parameter",
+        arguments=args
     )["Parameter"]["Value"]
 
 
@@ -73,7 +75,12 @@ def yaml_aws_constructor(loader, node):
     as node (argument)
 
     Example:
-      VpcId: !AWS {service: ec2, action: describe_vpcs, arguments: {Filters: [{Name: "tag:team", Values: [sometag]}]}, result_filter: "Vpcs[].VpcId"}  # noqa
+      VpcId: !AWS {
+          service: ec2, \
+          action: describe_vpcs,
+          arguments: {Filters: [{Name: "tag:team", Values: [sometag]}]},
+          result_filter: "Vpcs[].VpcId"
+      }
     """
     args_dict = loader.construct_mapping(node, deep=True)
     return call_aws(**args_dict)
@@ -200,7 +207,7 @@ def parse_mako(stack_name, template_body, parameters):
     parameters["call_aws"] = call_aws
     try:
         template = yaml.load(mako_template.render(**parameters))
-    except:
+    except Exception:
         raise SystemExit(
             mako.exceptions.text_error_template().render()
         )
@@ -210,7 +217,10 @@ def parse_mako(stack_name, template_body, parameters):
     # An existing output in the template will not be overriden by an
     # automatic output.
     outputs = {
-        k: {"Value": {"Ref": k}, "Export": {"Name": "{}-{}".format(stack_name, k)}} for k in template.get("Resources", {}).keys()  # noqa
+        k: {
+            "Value": {"Ref": k},
+            "Export": {"Name": "{}-{}".format(stack_name, k)}
+        } for k in template.get("Resources", {}).keys()
     }
     outputs.update(template.get("Outputs", {}))
     template["Outputs"] = outputs
@@ -231,7 +241,10 @@ def parse_jinja(stack_name, template_body, parameters):
     # An existing output in the template will not be overriden by an
     # automatic output.
     outputs = {
-        k: {"Value": {"Ref": k}, "Export": {"Name": "{}-{}".format(stack_name, k)}} for k in template.get("Resources", {}).keys()  # noqa
+        k: {
+            "Value": {"Ref": k},
+            "Export": {"Name": "{}-{}".format(stack_name, k)}}
+        for k in template.get("Resources", {}).keys()
     }
     outputs.update(template.get("Outputs", {}))
     template["Outputs"] = outputs

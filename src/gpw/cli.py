@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 
+""" CLI entry point
+"""
+
 from __future__ import print_function
 import argparse
 import logging
@@ -15,27 +18,9 @@ import gpw.utils
 import gpw.stacks
 
 
-def parse_args(args):
-    """ parse CLI options
-
-    TODO (tiadobatima): replace "action" option with subparser
+def build_common_args(parser):
+    """ Configures arguments to all actions/subparsers
     """
-
-    parser = argparse.ArgumentParser("Manage cloudformation stacks")
-    parser.add_argument(
-        "action",
-        type=str,
-        choices=[
-            "create",
-            "delete",
-            "list",
-            "render",
-            "update",
-            "upsert",
-            "validate"
-        ],
-        help="The action to be performed"
-    )
     parser.add_argument(
         "stack",
         type=argparse.FileType("r"),
@@ -59,18 +44,19 @@ def parse_args(args):
         help="Waits for the stack to be ready/deleted before exiting"
     )
     parser.add_argument(
-        "--review",
-        "-r",
-        action="store_true",
-        default=False,
-        help="Review changes"
-    )
-    parser.add_argument(
         "--build-id",
         "-b",
         default=os.getenv("BUILD_ID", ""),
         help="The build id. Defaults to BUILD_ID env variable"
     )
+
+
+def parse_args(args):
+    """ parse CLI options
+    """
+
+    parser = argparse.ArgumentParser("Manage cloudformation stacks")
+
     parser.add_argument(
         "--dry-run",
         action="store_true",
@@ -88,7 +74,86 @@ def parse_args(args):
         help="The log level for botocore"
     )
 
-    return parser.parse_args()
+    # subparser for each action
+    subparser_obj = parser.add_subparsers(dest="action")
+    actions = [
+        "create",
+        "update",
+        "delete",
+        "upsert",
+        "list",
+        "render",
+        "validate"
+    ]
+
+    subparsers = {}
+    for action in actions:
+        subparsers[action] = subparser_obj.add_parser(action)
+        build_common_args(subparsers[action])
+
+    # action-specficic arguments
+    #
+    # update
+    subparsers["update"].add_argument(
+        "--review",
+        "-r",
+        action="store_true",
+        default=False,
+        help="Review changes"
+    )
+
+    # upsert
+    subparsers["upsert"].add_argument(
+        "--review",
+        "-r",
+        action="store_true",
+        default=False,
+        help="Review changes"
+    )
+
+    return parser.parse_args(args)
+
+
+def resolve_templating_engine(args):
+    """ Figures out what templating engine should be used to render the stack
+    """
+    # Figure out what templating engine to use.
+    # Only use -t option when stack comes from stdin
+    if args.stack.name == "<stdin>":
+        return args.templating_engine
+    elif ".mako" in args.stack.name[-5:]:
+        return "mako"
+    elif ".jinja" in args.stack.name[-6:]:
+        return "jinja"
+    elif ".yaml" in args.stack.name[-5:]:
+        return "yaml"
+    raise NotImplementedError("Templating engine not supported. Must be set "
+                              "to 'mako', 'jinja', or '' in the command line "
+                              "or by using the equivalent file extension")
+
+
+def execute_action(stack, args, stack_attributes):
+    """ Executes the specifc action
+    """
+    if args.action == "create":
+        stack.create(wait=args.wait)
+    elif args.action == "delete":
+        stack.delete(wait=args.wait)
+    elif args.action == "update":
+        stack.update(wait=args.wait, review=args.review)
+    elif args.action == "upsert":
+        stack.upsert(wait=args.wait)
+    elif args.action == "render":
+        print("===> Stack Attributes:")
+        print(yaml.dump(stack_attributes, indent=2))
+        print("===> Final Template:")
+        stack.render()
+    elif args.action == "list":
+        pass
+    elif args.action == "validate":
+        stack.validate()
+    else:
+        raise NotImplementedError("Action not implemented")
 
 
 def main():
@@ -111,19 +176,7 @@ def main():
     # script logging level
     logging.basicConfig(level=loglevel)
 
-    # Figure out what templating engine to use.
-    # Only use -t option when stack comes from stdin
-    if args.stack.name == "<stdin>":
-        templating_engine = args.templating_engine
-    elif ".mako" in args.stack.name[-5:]:
-        templating_engine = "mako"
-    elif ".jinja" in args.stack.name[-6:]:
-        templating_engine = "jinja"
-    elif ".yaml" in args.stack.name[-5:]:
-        templating_engine = "yaml"
-    else:
-        raise SystemExit("Set templating engine to 'mako', 'jinja', or ''. \
-            Or use the appropriate file extension")
+    templating_engine = resolve_templating_engine(args)
 
     stack_file = args.stack.read()
     template_params = {
@@ -139,45 +192,26 @@ def main():
 
     if templating_engine == "mako":
         logging.debug("Trying to render mako input file...")
+        stack_template = mako.template.Template(
+            stack_file,
+            strict_undefined=False
+        )
         try:
-            stack_template = mako.template.Template(
-                stack_file,
-                strict_undefined=False
-            )
-            stack_attributes = yaml.load(
-                stack_template.render(**template_params)
-            )
+            rendered_template = stack_template.render(**template_params)
         # mako wraps the exception where the real information is, so we unwrap
         # and display only the part that matters to the user
-        except Exception as exc:
+        except Exception:
             raise SystemExit(mako.exceptions.text_error_template().render())
     elif templating_engine == "jinja":
         stack_template = jinja2.Template(stack_file)
-        stack_attributes = yaml.load(stack_template.render(**template_params))
+        rendered_template = yaml.load(stack_template.render(**template_params))
     else:
-        stack_attributes = yaml.load(stack_file)
+        stack_attributes = stack_file
 
+    stack_attributes = yaml.load(rendered_template)
     stack_attributes["BuildId"] = args.build_id
-
     stack = gpw.stacks.factory(**stack_attributes)
-
-    if args.action == "create":
-        stack.create(wait=args.wait)
-    if args.action == "delete":
-        stack.delete(wait=args.wait)
-    if args.action == "update":
-        stack.update(wait=args.wait, review=args.review)
-    if args.action == "upsert":
-        stack.upsert(wait=args.wait)
-    if args.action == "render":
-        print("===> Stack Attributes:")
-        print(yaml.dump(stack_attributes, indent=2))
-        print("===> Final Template:")
-        stack.render()
-    if args.action == "list":
-        pass
-    if args.action == "validate":
-        stack.validate()
+    execute_action(stack, args, stack_attributes)
 
 
 if __name__ == "__main__":
