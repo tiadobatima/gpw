@@ -25,25 +25,25 @@ def get_version():
 
 def get_install_requirements():
     with open("requirements/pip-install.txt") as f:
-        return f.readlines()
+        return [l.strip() for l in f if l.strip() and not l.startswith("#")]
 
 
 def get_test_requirements():
     with open("requirements/pip-test.txt") as f:
-        return f.readlines()
+        return [l.strip() for l in f if l.strip() and not l.startswith("#")]
 
 
 config = {
-    "name": "gpw",
+    "name": "gpwm",
     "version": get_version(),
     "description": "Multi cloud provider infrastructure-as-code wrapper",
     "author": "Gustavo Baratto",
     "author_email": "gbaratto@gmail.com",
-    "url": "https://github.com/tiadobatima/gpw",
+    "url": "https://github.com/tiadobatima/gpwm",
     "packages": find_packages("src"),
     "package_dir": {'': 'src'},
     "entry_points": {
-        "console_scripts": ["gpw=gpw.cli:main"]
+        "console_scripts": ["gpwm=gpwm.cli:main"]
     },
     "setup_requires": ["pytest-runner"],
     "install_requires": get_install_requirements(),

@@ -28,8 +28,8 @@ import jinja2
 import mako.exceptions
 import mako.template
 
-import gpw.utils
-import gpw.stacks
+import gpwm.utils
+import gpwm.stacks
 
 
 def build_common_args(parser):
@@ -195,9 +195,9 @@ def main():
     stack_file = args.stack.read()
     template_params = {
         "build_id": args.build_id,
-        "call_aws": gpw.utils.call_aws,
-        "get_stack_output": gpw.utils.get_stack_output,
-        "get_stack_resource": gpw.utils.get_stack_resource
+        "call_aws": gpwm.utils.call_aws,
+        "get_stack_output": gpwm.utils.get_stack_output,
+        "get_stack_resource": gpwm.utils.get_stack_resource
     }
 
     # try rendering stack with mako first, if fails try jinja,
@@ -224,7 +224,7 @@ def main():
 
     stack_attributes = yaml.load(rendered_template)
     stack_attributes["BuildId"] = args.build_id
-    stack = gpw.stacks.factory(**stack_attributes)
+    stack = gpwm.stacks.factory(**stack_attributes)
     execute_action(stack, args, stack_attributes)
 
 

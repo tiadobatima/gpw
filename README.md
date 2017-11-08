@@ -1,10 +1,10 @@
-# GPW Project
+# GPWM Project
 
-## What's GPW?
+## What's GPWM?
 
 
-GPW are the initials of *Gwynedd Purves Wynn-Aubrey Meredith's* given
-names.
+GPWM are the initials for *Gwynedd Purves Wynn-Aubrey Meredith's* 
+
 
 For the few who don't yet know, Major GPW Meredith, of the Seventh Heavy
 Battery of the Royal Australian Artillery was the veteran commander of the 
@@ -17,7 +17,7 @@ Here we honor his courage, sacrifice, and life-story by aptly naming an
 
 ##### The great GPW Meredith - Australian Hero
 
-![The great GPW Meredith, Australian Hero](docs/gpw.jpg "The great GPW Meredith")
+![The great GPW Meredith, Australian Hero](docs/gpwm.jpg "The great GPW Meredith")
 
 ##### Evil Emu - Enemy Of The State
 ![Evil Emu - Enemy Of The State](docs/emu.png "Evil Emu")
@@ -48,38 +48,38 @@ To address these shortcomings, the tool first uses a higher-level templating eng
 ## Usage Examples
 
 ```
-pip install -r requirements.txt
+pip install gpwm
 export BUILD_ID="SOME_BUILD_ID"  # for example "$(date -u +'%F-%H-%M-%S')-$BITBUCKET_COMMIT"
 export AWS_DEFAULT_PROFILE=some-profile
 export AWS_DEFAULT_REGION=us-west-2
 
 # getting help
-python3 gpw.py --help
+python3 gpwm.py --help
 
 # render: only print stack on screen
-python3 gpw.py render aws/stacks/vpc-training-dev.mako
-python3 gpw.py render google/deployments/instance.mako
+python3 gpwm.py render aws/stacks/vpc-training-dev.mako
+python3 gpwm.py render google/deployments/instance.mako
 
 # create: creates the stack in cloudformation
-python3 gpw.py create aws/stacks/vpc-training-dev.mako
-python3 gpw.py create google/deployments/instance.mako
+python3 gpwm.py create aws/stacks/vpc-training-dev.mako
+python3 gpwm.py create google/deployments/instance.mako
 
 # delete
-python3 gpw.py delete aws/stacks/vpc-training-dev.mako
-python3 gpw.py delete google/deployments/instance.mako
+python3 gpwm.py delete aws/stacks/vpc-training-dev.mako
+python3 gpwm.py delete google/deployments/instance.mako
 
 # update
-python3 gpw.py update aws/stacks/vpc-training-dev.mako
-python3 gpw.py update google/deployments/instance.mako
+python3 gpwm.py update aws/stacks/vpc-training-dev.mako
+python3 gpwm.py update google/deployments/instance.mako
 
 # update with review (change set)
-python3 gpw.py update aws/stacks/vpc-training-dev.mako -r
-python3 gpw.py update google/deployments/instance.mako -r
+python3 gpwm.py update aws/stacks/vpc-training-dev.mako -r
+python3 gpwm.py update google/deployments/instance.mako -r
 
 # Stack files can be fed via stdin (-t option must be used).
 # Very handy when another tool is creating the stack file on the fly
-cat my-stack.txt | python3 gpw.py create -t jinja -
-some-script.sh | python3 gpw.py create -t jinja -
+cat my-stack.txt | python3 gpwm.py create -t jinja -
+some-script.sh | python3 gpwm.py create -t jinja -
 ```
 
 ## Stacks

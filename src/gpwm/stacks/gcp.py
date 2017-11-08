@@ -20,11 +20,11 @@ import yaml
 
 from apiclient.errors import HttpError
 
-import gpw.stacks
-import gpw.utils
+import gpwm.stacks
+import gpwm.utils
 
 
-class GCPStack(gpw.stacks.BaseStack):
+class GCPStack(gpwm.stacks.BaseStack):
     GCP_DEPLOYMENT_BODY_KEYS = [
         "description",
         "fingerprint",
@@ -117,7 +117,7 @@ class GCPStack(gpw.stacks.BaseStack):
         """
 
         try:
-            return gpw.utils.GCP_API.deployments().get(
+            return gpwm.utils.GCP_API.deployments().get(
                 project=self.project,
                 deployment=self.name
             ).execute()
@@ -146,7 +146,7 @@ class GCPStack(gpw.stacks.BaseStack):
                 break
 
     def create(self, wait=False):
-        gpw.utils.GCP_API.deployments().insert(
+        gpwm.utils.GCP_API.deployments().insert(
             project=self.project,
             body=self.body
         ).execute()
@@ -156,7 +156,7 @@ class GCPStack(gpw.stacks.BaseStack):
     def delete(self, wait=False):
         if not self.get():
             raise SystemExit("Deployment doesn't exist: {}".format(self.name))
-        gpw.utils.GCP_API.deployments().delete(
+        gpwm.utils.GCP_API.deployments().delete(
             project=self.project,
             deployment=self.name
         ).execute()
@@ -164,7 +164,7 @@ class GCPStack(gpw.stacks.BaseStack):
             self.wait()
 
     def update(self, wait=False, review=False):
-        gpw.utils.GCP_API.deployments().insert(
+        gpwm.utils.GCP_API.deployments().insert(
             project=self.project,
             body=self.body
         ).execute()

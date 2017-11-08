@@ -19,10 +19,10 @@ import os
 import subprocess
 import yaml
 
-import gpw.stacks
+import gpwm.stacks
 
 
-class ShellStack(gpw.stacks.BaseStack):
+class ShellStack(gpwm.stacks.BaseStack):
     """ Class for stacks of type "Shell"
 
     This class allows for running commands in the local system.

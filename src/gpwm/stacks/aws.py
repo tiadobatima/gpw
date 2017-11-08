@@ -20,11 +20,11 @@ import yaml
 
 from botocore.exceptions import ClientError
 
-import gpw.stacks
-import gpw.utils
+import gpwm.stacks
+import gpwm.utils
 
 
-class CloudformationStack(gpw.stacks.BaseStack):
+class CloudformationStack(gpwm.stacks.BaseStack):
     def __init__(self, **kwargs):
         """
         Args:
@@ -43,29 +43,29 @@ class CloudformationStack(gpw.stacks.BaseStack):
             self.TemplateBody = yaml.safe_dump(self.TemplateBody, indent=2)
         else:
             template_url = urlparse(self.TemplateBody)
-            template_body = gpw.utils.get_template_body(template_url)
+            template_body = gpwm.utils.get_template_body(template_url)
 
             if ".mako" in template_url.path[-5:]:
                 if not hasattr(self, "Parameters"):
                     self.Parameters = {}
                 self.Parameters["build_id"] = self.BuildId
                 args = [self.StackName, template_body, self.Parameters]
-                template = gpw.utils.parse_mako(*args)
+                template = gpwm.utils.parse_mako(*args)
                 # mako doesn't need Parameters as they're available to the
                 # template as python variables
                 del self.Parameters
             elif ".jinja" in template_url.path[-6:]:
                 args = [self.StackName, template_body, self.Parameters]
-                template = gpw.utils.parse_jinja(*args)
+                template = gpwm.utils.parse_jinja(*args)
                 # jinja doesn't need Parameters as they're available to the
                 # template as python variables
                 del self.Parameters
             elif ".json" in template_url.path[-5:]:
                 args = [self.StackName, template_body, self.Parameters]
-                template = gpw.utils.parse_json(*args)
+                template = gpwm.utils.parse_json(*args)
             elif ".yaml" in template_url[-5:]:
                 args = [self.StackName, template_body, self.Parameters]
-                template = gpw.utils.parse_yaml(*args)
+                template = gpwm.utils.parse_yaml(*args)
             else:
                 raise SystemExit("file extension not supported")
 
@@ -84,18 +84,18 @@ class CloudformationStack(gpw.stacks.BaseStack):
 
     def create(self, wait=False):
         self.validate()
-        gpw.utils.BOTO_CF_RESOURCE.create_stack(**self.__dict__)
+        gpwm.utils.BOTO_CF_RESOURCE.create_stack(**self.__dict__)
         if wait:
-            waiter = gpw.utils.BOTO_CF_CLIENT.get_waiter(
+            waiter = gpwm.utils.BOTO_CF_CLIENT.get_waiter(
                 "stack_create_complete"
             )
             waiter.wait(StackName=self.StackName)
 
     def delete(self, wait=False):
-        cf_stack = gpw.utils.BOTO_CF_RESOURCE.Stack(self.StackName)
+        cf_stack = gpwm.utils.BOTO_CF_RESOURCE.Stack(self.StackName)
         cf_stack.delete()
         if wait:
-            waiter = gpw.utils.BOTO_CF_CLIENT.get_waiter(
+            waiter = gpwm.utils.BOTO_CF_CLIENT.get_waiter(
                 "stack_delete_complete"
             )
             waiter.wait(StackName=self.StackName)
@@ -105,10 +105,10 @@ class CloudformationStack(gpw.stacks.BaseStack):
         if review:
             self.manage_change_set()
         else:
-            cf_stack = gpw.utils.BOTO_CF_RESOURCE.Stack(self.StackName)
+            cf_stack = gpwm.utils.BOTO_CF_RESOURCE.Stack(self.StackName)
             cf_stack.update(**self.__dict__)
         if wait:
-            waiter = gpw.utils.BOTO_CF_CLIENT.get_waiter(
+            waiter = gpwm.utils.BOTO_CF_CLIENT.get_waiter(
                 "stack_update_complete"
             )
             waiter.wait(StackName=self.StackName)
@@ -120,7 +120,7 @@ class CloudformationStack(gpw.stacks.BaseStack):
                 build_id = tag["Value"]
         change_set_name = "{}-{}".format(self.StackName, build_id)
 
-        gpw.utils.BOTO_CF_CLIENT.create_change_set(
+        gpwm.utils.BOTO_CF_CLIENT.create_change_set(
             ChangeSetName=change_set_name,
             ChangeSetType="UPDATE",
             **self.__dict__
@@ -128,12 +128,12 @@ class CloudformationStack(gpw.stacks.BaseStack):
 
         # wait for change set to be ready
         time.sleep(2)
-        waiter = gpw.utils.BOTO_CF_CLIENT.get_waiter(
+        waiter = gpwm.utils.BOTO_CF_CLIENT.get_waiter(
             "change_set_create_complete"
         )
         waiter.wait(ChangeSetName=change_set_name, StackName=self.StackName)
 
-        change_set = gpw.utils.BOTO_CF_CLIENT.describe_change_set(
+        change_set = gpwm.utils.BOTO_CF_CLIENT.describe_change_set(
             ChangeSetName=change_set_name,
             StackName=self.StackName
         )
@@ -147,7 +147,7 @@ class CloudformationStack(gpw.stacks.BaseStack):
             answer = self.changeset_user_input(change_set_name)
 
         if wait:
-            waiter = gpw.utils.BOTO_CF_CLIENT.get_waiter(
+            waiter = gpwm.utils.BOTO_CF_CLIENT.get_waiter(
                 "stack_update_complete"
             )
             waiter.wait(StackName=self.StackName)
@@ -156,13 +156,13 @@ class CloudformationStack(gpw.stacks.BaseStack):
         answer = input("Execute(e), Delete (d), or Keep(k) change set? ")
         if answer == "e":
             print("Executing changeset {}...".format(change_set_name))
-            gpw.utils.BOTO_CF_CLIENT.execute_change_set(
+            gpwm.utils.BOTO_CF_CLIENT.execute_change_set(
                 ChangeSetName=change_set_name,
                 StackName=self.StackName
             )
         elif answer == "d":
             print("Deleting changeset {}. No changes made to stack {}".format(change_set_name, self.StackName)) # noqa
-            gpw.utils.BOTO_CF_CLIENT.delete_change_set(
+            gpwm.utils.BOTO_CF_CLIENT.delete_change_set(
                 ChangeSetName=change_set_name,
                 StackName=self.StackName
             )
@@ -191,7 +191,7 @@ class CloudformationStack(gpw.stacks.BaseStack):
 
     def validate(self):
         try:
-            gpw.utils.BOTO_CF_CLIENT.validate_template(
+            gpwm.utils.BOTO_CF_CLIENT.validate_template(
                 TemplateBody=self.TemplateBody
             )
         except ClientError as exc:

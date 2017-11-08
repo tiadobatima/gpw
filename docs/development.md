@@ -38,7 +38,7 @@ and [here](https://docs.pytest.org/en/latest/goodpractices.html#tests-outside-ap
 │   ├── development.md
 │   ├── emu.png
 │   ├── gcp.md
-│   ├── gpw.jpg
+│   ├── gpwm.jpg
 │   └── shell.md
 ├── env
 ├── examples
@@ -80,7 +80,7 @@ and [here](https://docs.pytest.org/en/latest/goodpractices.html#tests-outside-ap
 ├── setup.cfg
 ├── setup.py
 ├── src
-│   └── gpw
+│   └── gpwm
 │       ├── cli.py
 │       ├── __init__.py
 │       ├── stacks

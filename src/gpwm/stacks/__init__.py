@@ -38,12 +38,12 @@ def factory(**kwargs):
         stack_type = "cloudformation"
 
     if stack_type == "cloudformation":
-        import gpw.stacks.aws
-        return gpw.stacks.aws.CloudformationStack(**kwargs)
+        import gpwm.stacks.aws
+        return gpwm.stacks.aws.CloudformationStack(**kwargs)
     elif stack_type == "shell":
-        import gpw.stacks.shell
-        return gpw.stacks.shell.ShellStack(**kwargs)
+        import gpwm.stacks.shell
+        return gpwm.stacks.shell.ShellStack(**kwargs)
     elif stack_type == "gcp":
-        import gpw.stacks.gcp
-        return gpw.stacks.gcp.GCPStack(**kwargs)
+        import gpwm.stacks.gcp
+        return gpwm.stacks.gcp.GCPStack(**kwargs)
     raise SystemExit("Stack type not supported: {}".format(stack_type))

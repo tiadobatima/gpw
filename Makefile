@@ -12,7 +12,7 @@
 # $ make clean-venv (or make clean-all)
 #
 
-PACKAGE := gpw
+PACKAGE := gpwm
 TESTDIR := tests
 SHELL = /bin/bash
 
@@ -63,11 +63,11 @@ check: install-test-requirements check-style
 # checks code style
 check-style:
 	python3 setup.py flake8
-	python3 setup.py lint
+#python3 setup.py lint
 
 # check test coverage
 check-coverage:
-	pytest --cov=$(PACKAGE) tests
+	pytest --cov=$(PACKAGE) ${TESTDIR}/
 
 # tests the tool
 test: check
@@ -76,7 +76,11 @@ test: check
 
 # builds the package
 dist: clean
+	python3 setup.py sdist
 	python3 setup.py bdist_wheel
+
+upload:
+	twine upload dist/*
 
 # installs this package and its requirements
 install:
@@ -92,7 +96,7 @@ clean-all: clean clean-venv
 
 # cleans up python compiled files, built packages, tests results, caches, etc
 clean:
-	find $(PACKAGE) \( -path '*__pycache__/*' -o -name __pycache__ \) -delete
+	find src/$(PACKAGE) \( -path '*__pycache__/*' -o -name __pycache__ \) -delete
 	find $(TESTDIR) \( -path '*__pycache__/*' -o -name __pycache__ \) -delete
 	rm -rf build dist *.egg-info .cache .eggs .coverage
 
